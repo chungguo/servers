@@ -1,0 +1,10 @@
+{
+  "name": "servers",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "dependencies": {
+    "lerna": "^4.0.0"
+  }
+}

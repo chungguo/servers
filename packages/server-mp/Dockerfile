@@ -1,9 +1,13 @@
 FROM node:latest
 
-WORKDIR /usr/app/servers
+WORKDIR /server-mp
 
 COPY package*.json ./
 
-RUN npm ci --only=production
+RUN npm install
 
 COPY . .
+
+EXPOSE 10000
+
+CMD npm run start

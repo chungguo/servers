@@ -1,19 +1,17 @@
-import { Model } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { HelpersService } from 'src/helpers/helpers.service';
 
 import { VoiceMessage, MessageStrategies } from 'src/typings/wechat';
-import { Reply, ReplyDocument } from 'src/strategies/schemas/reply.schema';
 
 @Injectable()
-export class VoiceMessageStrategy implements MessageStrategies {
+export class VoiceMessageReplyStrategy implements MessageStrategies {
   constructor(
     private config: ConfigService,
-    @InjectModel(Reply.name) private replyModel: Model<ReplyDocument>
+    private helpers: HelpersService,
   ) { }
 
-  async buildMessage(message: VoiceMessage) {
+  async replyMessage(message: VoiceMessage) {
     const { FromUserName, ToUserName, Recognition, MsgId } = message;
 
     let reply = this.config.get('MP_DEFAULT_TEXT_RESP');;
@@ -21,14 +19,10 @@ export class VoiceMessageStrategy implements MessageStrategies {
     if (!Recognition) {
       reply = '对不起🧎‍♂️，暂时无法识别该条语音消息内容';
     } else {
-      const collections = await this.replyModel.find().exec();
-
-      for (const collect of collections) {
-        if (collect.keywords.includes(Recognition)) {
-          reply = collect.message;
-          break;
-        }
-      }
+      /** 去除语音识别出的符号  */
+      const keyword = Recognition.replace(/[.,。，？?!@#$%^&*()+_《》。〉]/g, '');
+      const matched = await this.helpers.matchReplyKeyWord(keyword);
+      reply = matched ?? `对不起，未匹配到「${Recognition}」相关信息～`
     }
 
     return `<xml>

@@ -1,5 +1,5 @@
 export interface MessageStrategies {
-  buildMessage(message: Message): Promise<string>;
+  replyMessage(message: Message): Promise<string>;
 }
 
 export enum MessageTypeEnum {

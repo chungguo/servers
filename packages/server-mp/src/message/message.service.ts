@@ -1,18 +1,16 @@
 import { Injectable } from "@nestjs/common";
-import { ConfigService } from '@nestjs/config';
 
 import { Message, MessageTypeEnum } from 'src/typings/wechat';
-import { TextMessageStrategy } from 'src/strategies/text.strategy';
-import { ImageMessageStrategy } from 'src/strategies/image.strategy';
-import { VoiceMessageStrategy } from 'src/strategies/voice.strategy';
+import { TextMessageReplyStrategy } from 'src/strategies/text.strategy';
+import { ImageMessageReplyStrategy } from 'src/strategies/image.strategy';
+import { VoiceMessageReplyStrategy } from 'src/strategies/voice.strategy';
 
 @Injectable()
 export class MessageService {
   constructor(
-    private readonly config: ConfigService,
-    private readonly text: TextMessageStrategy,
-    private readonly image: ImageMessageStrategy,
-    private readonly voice: VoiceMessageStrategy,
+    private readonly text: TextMessageReplyStrategy,
+    private readonly image: ImageMessageReplyStrategy,
+    private readonly voice: VoiceMessageReplyStrategy,
   ) { }
 
   strategies = {
@@ -28,7 +26,7 @@ export class MessageService {
     const strategy = this.strategies[MsgType];
 
     if (strategy) {
-      const reply = await strategy.buildMessage(message);
+      const reply = await strategy.replyMessage(message);
       return reply;
     }
 

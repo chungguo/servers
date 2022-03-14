@@ -10,6 +10,9 @@ export class Reply {
 
   @Prop()
   message: string;
+
+  @Prop()
+  type: "text" | "news";
 }
 
 export const ReplySchema = SchemaFactory.createForClass(Reply);

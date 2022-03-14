@@ -1,29 +1,23 @@
 import { Module } from "@nestjs/common";
-import { MongooseModule } from '@nestjs/mongoose';
 
-import { ReplySchema, Reply } from 'src/strategies/schemas/reply.schema';
-import { TextMessageStrategy } from 'src/strategies/text.strategy';
-import { ImageMessageStrategy } from 'src/strategies/image.strategy';
-import { VoiceMessageStrategy } from 'src/strategies/voice.strategy';
+import { HelpersModule } from "src/helpers/helpers.module";
+import { TextMessageReplyStrategy } from 'src/strategies/text.strategy';
+import { ImageMessageReplyStrategy } from 'src/strategies/image.strategy';
+import { VoiceMessageReplyStrategy } from 'src/strategies/voice.strategy';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([
-      {
-        name: Reply.name,
-        schema: ReplySchema,
-      }
-    ])
+    HelpersModule,
   ],
   providers: [
-    TextMessageStrategy,
-    ImageMessageStrategy,
-    VoiceMessageStrategy,
+    TextMessageReplyStrategy,
+    ImageMessageReplyStrategy,
+    VoiceMessageReplyStrategy,
   ],
   exports: [
-    TextMessageStrategy,
-    ImageMessageStrategy,
-    VoiceMessageStrategy,
+    TextMessageReplyStrategy,
+    ImageMessageReplyStrategy,
+    VoiceMessageReplyStrategy,
   ],
 })
-export class StrategiesModule {}
+export class StrategiesModule { }

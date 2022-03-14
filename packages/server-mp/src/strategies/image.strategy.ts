@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { ImageMessage, MessageStrategies } from 'src/typings/wechat';
 
 @Injectable()
-export class ImageMessageStrategy implements MessageStrategies {
-  async buildMessage(message: ImageMessage) {
+export class ImageMessageReplyStrategy implements MessageStrategies {
+  async replyMessage(message: ImageMessage) {
     const { FromUserName, ToUserName, MsgId } = message;
 
     return `<xml>
